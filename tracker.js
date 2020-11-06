@@ -1,5 +1,5 @@
 class Tracker {
-  constructor(name, duration = 1000 * 60 * 60 * 2.5, interval = 1000) {
+  constructor(name, duration = 1000 * 60 * 60 * 2.5, interval = 1000 * 5) {
     this._name = name;
     this._duration = duration;
     this._isTracking = false;
@@ -37,10 +37,12 @@ class Tracker {
   }
 
   track(channel) {
-    this._isTracking = true;
+    this.setIsTracking(true);
     let interval = setInterval(() => {
+      if (channel.members.size === 0) this.setIsTracking(false);
       if (!this._isTracking) {
         clearInterval(interval);
+        console.log('stopped tracking');
       }
       channel.members.forEach((member) => {
         if (!this._attendance.has(member.user.id)) {

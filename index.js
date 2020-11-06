@@ -36,12 +36,14 @@ client.on('message', async (msg) => {
   }
 
   if (command === 'attendance') {
-    let attendance = await mcctracker.attendance;
-    console.log('attendance value', attendance);
+    let attendance = mcctracker.attendance;
+    if (attendance.length === 0) return msg.reply('list is empty 🤷‍♂️');
     let usernames = attendance.map((user) => {
       return user.name;
     });
-    msg.reply(usernames);
+    msg.reply(
+      `\`\`\`Number of users: ${usernames.length}\nUsernames: [${usernames}]\`\`\``
+    );
   }
 
   if (command === 'stoptrack') {
