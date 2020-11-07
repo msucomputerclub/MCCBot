@@ -31,8 +31,11 @@ client.on('message', async (msg) => {
   if (command === 'track') {
     const channel = msg.member.voice.channel;
     if (!channel) return msg.reply('you must be in a voice channel');
-    console.log('tracking');
+    if (mcctracker.isTracking)
+      return msg.reply("I'm already tracking a channel");
     mcctracker.track(channel);
+    console.log('tracking');
+    msg.react('👀');
   }
 
   if (command === 'attendance') {
@@ -47,8 +50,10 @@ client.on('message', async (msg) => {
   }
 
   if (command === 'stoptrack') {
-    console.log('stopped tracking');
+    if (!mcctracker.isTracking) return msg.reply("I'm not tracking anything");
     mcctracker.setIsTracking(false);
+    console.log('stopped tracking');
+    msg.react('👌');
     return;
   }
 

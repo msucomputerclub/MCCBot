@@ -1,0 +1,9 @@
+version: '3'
+services:
+  mccbot:
+    container_name: 'mccbot'
+    build: .
+    volumes:
+      - '.:/usr/src/mccbot'
+    env_file:
+      - .env

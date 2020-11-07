@@ -1,3 +1,8 @@
+//@description: This class is designed to keep track of attendance of a given Discord channel.
+//@params: name - name for a tracker.
+//@params: duration - how long to track for.                                            (default: 2.5 hours OR until channel is empty)
+//@params: interval - the time interval between channel member lookup.                  (default: 5 seconds)
+
 class Tracker {
   constructor(name, duration = 1000 * 60 * 60 * 2.5, interval = 1000 * 5) {
     this._name = name;
@@ -37,13 +42,20 @@ class Tracker {
   }
 
   track(channel) {
-    this.setIsTracking(true);
+    this.setIsTracking(true); //set isTracking flag to true in case it's false
+
+    //init interval loop
     let interval = setInterval(() => {
-      if (channel.members.size === 0) this.setIsTracking(false);
+      if (channel.members.size === 0) this.setIsTracking(false); //if channel is empty set flag to false
+
+      //stop loop is flag is false
       if (!this._isTracking) {
         clearInterval(interval);
         console.log('stopped tracking');
       }
+
+      //look through list of members in the channel and add to map
+      //if they're not already there
       channel.members.forEach((member) => {
         if (!this._attendance.has(member.user.id)) {
           this._attendance.set(member.user.id, {
