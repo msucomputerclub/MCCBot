@@ -1,4 +1,4 @@
 # MCCBot
-MCC discord bot
 
-Bot for taking attendance for club meetings.
+![Deployed on Heroku](https://github.com/msucomputerclub/MCCBot/workflows/Deploy%20to%20Heroku/badge.svg)
+General Discord Bot for Montclair Computer Club.
