@@ -11,31 +11,44 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Login to Heroku Registry
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
         run: heroku container:login
+
+      - name: Build and push
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run: heroku container:push -a dev-mcc-discord-bot worker
+
       - name: Release to Heroku dev
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:release -a mcc-discord-bot-new worker
-      - name: Login to Heroku Registry
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:login
+        run: heroku container:release -a dev-mcc-discord-bot worker
 
       - name: Pull dev image
-        run: docker pull registry.heroku.com/mcc-discord-bot-new/worker
+        run: docker pull registry.heroku.com/dev-mcc-discord-bot/worker
+
+      - name: Re-tag dev as prod
+        # Again, Heroku expects a naming convention here, so we just have to comply.
+        run: docker tag registry.heroku.com/dev-mcc-discord-bot/worker registry.heroku.com/mcc-discord-bot/worker
 
       - name: Push production image
-        run: docker push registry.heroku.com/mcc-discord-bot-new/worker
+        run: docker push registry.heroku.com/api-spring-boot/worker
 
       - name: Push Prod Image
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:release -a mcc-discord-bot-new worker
+        run: heroku container:release -a api-spring-boot worker
 
+      - name: Push production image
+        run: docker push registry.heroku.com/mcc-discord-bot/worker
 
+      - name: Push Prod Image
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run: heroku container:release -a mcc-discord-bot worker
 
         #   api_key: ${{secrets.HEROKU_API_KEY}}
         #   email: 'cnovac1441@gmail.com'
