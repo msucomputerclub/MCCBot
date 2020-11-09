@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Deployed on Heroku
 
 on:
   push:
@@ -9,12 +9,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.6.8
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build, Push and Deploy to Heroku #set the whatever name you want to this step
+        id: heroku
+        uses: snithyanantham/docker-compose-multiple-apps-heroku-deploy@v1.0 # use the latest version of the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'mcc-discord-bot-actions'
           heroku_email: 'cnovac1441@gmail.com'
-          procfile: 'worker: npm start'
+          docker_compose_file: ./docker-compose.yml
+          heroku_apps: '[{"imagename":"mccbot","appname":"discord-bot","apptype":"worker"}]'
         env:
           TOKEN: ${{secrets.TOKEN}}
