@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to Heroku
 
 on:
   push:
@@ -15,5 +15,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'mcc-discord-bot'
           heroku_email: 'cnovac1441@gmail.com'
-          env_file: '.env'
           procfile: 'worker: npm start'
