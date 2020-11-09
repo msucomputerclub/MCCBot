@@ -16,3 +16,5 @@ jobs:
           heroku_app_name: 'mcc-discord-bot-actions'
           heroku_email: 'cnovac1441@gmail.com'
           procfile: 'worker: npm start'
+        env:
+          TOKEN: ${{secrets.TOKEN}}
