@@ -15,25 +15,25 @@ jobs:
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
         run: heroku container:login
-        - name: Release to Heroku dev
-          env:
-            HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-          run: heroku container:release -a mcc-discord-bot-new worker
-        - name: Login to Heroku Registry
-          env:
-            HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-          run: heroku container:login
+      - name: Release to Heroku dev
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run: heroku container:release -a mcc-discord-bot-new worker
+      - name: Login to Heroku Registry
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run: heroku container:login
 
-        - name: Pull dev image
-          run: docker pull registry.heroku.com/mcc-discord-bot-new/worker
+      - name: Pull dev image
+        run: docker pull registry.heroku.com/mcc-discord-bot-new/worker
 
-        - name: Push production image
-          run: docker push registry.heroku.com/mcc-discord-bot-new/worker
+      - name: Push production image
+        run: docker push registry.heroku.com/mcc-discord-bot-new/worker
 
-        - name: Push Prod Image
-          env:
-            HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-          run: heroku container:release -a mcc-discord-bot-new worker
+      - name: Push Prod Image
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run: heroku container:release -a mcc-discord-bot-new worker
 
 
 
