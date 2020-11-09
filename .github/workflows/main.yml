@@ -15,10 +15,9 @@ jobs:
         id: heroku
         uses: snithyanantham/docker-compose-multiple-apps-heroku-deploy@v1.0 # use the latest version of the action
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: 'mcc-discord-bot-actions'
-          heroku_email: 'cnovac1441@gmail.com'
+          api_key: ${{secrets.HEROKU_API_KEY}}
+          email: 'cnovac1441@gmail.com'
           docker_compose_file: ./docker-compose.yml
-          heroku_apps: '[{"imagename":"mccbot","appname":"discord-bot","apptype":"worker"}]'
+          heroku_apps: '[{"imagename":"mccbot","appname":"mcc-discord-bot-actions","apptype":"worker"}]'
         env:
           TOKEN: ${{secrets.TOKEN}}
