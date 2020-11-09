@@ -18,6 +18,6 @@ jobs:
           api_key: ${{secrets.HEROKU_API_KEY}}
           email: 'cnovac1441@gmail.com'
           docker_compose_file: ./docker-compose.heroku.yml
-          heroku_apps: '[{"imagename":"mccbot","appname":"mcc-discord-bot-actions","apptype":"worker"}]'
+          heroku_apps: '[{"imagename":"mccbot","appname":"mcc-discord-bot-new","apptype":"worker"}]'
         env:
           TOKEN: ${{secrets.TOKEN}}
