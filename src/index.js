@@ -4,6 +4,7 @@ const client = new Discord.Client();
 const config = require('../config.json');
 const Tracker = require('./tracker');
 const mcctracker = new Tracker('my tracker');
+const PREFIX = process.env.PREFIX || config.prefix;
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -15,8 +16,8 @@ client.on('ready', () => {
 
 client.on('message', async (msg) => {
   if (msg.author.bot) return;
-  if (!msg.content.startsWith(config.prefix)) return;
-  const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
+  if (!msg.content.startsWith(PREFIX)) return;
+  const args = msg.content.slice(PREFIX.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
   if (command === 'ping') {
