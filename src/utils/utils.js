@@ -5,12 +5,9 @@ module.exports = {
   checkRole: (cache, roles) => {
     for (const role of roles) {
       if (cache.has(role)) {
-        console.log(role);
-        console.log('YES');
         return true;
       }
     }
-    console.log('NO');
     return false;
   },
 };
