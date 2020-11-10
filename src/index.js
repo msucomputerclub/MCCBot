@@ -3,8 +3,10 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('../config.json');
 const Tracker = require('./tracker');
+const PREFIX = process.env.BOT_PREFIX || config.prefix;
+
+const utils = require('./utils/utils');
 const mcctracker = new Tracker('my tracker');
-const PREFIX = process.env.PREFIX || config.prefix;
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -15,10 +17,11 @@ client.on('ready', () => {
 });
 
 client.on('message', async (msg) => {
-  if (msg.author.bot) return;
-  if (!msg.content.startsWith(PREFIX)) return;
-  const args = msg.content.slice(PREFIX.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
+  if (msg.author.bot) return; //don't respond to bots
+  if (!msg.content.startsWith(PREFIX)) return; //check for prefix
+
+  const args = msg.content.slice(PREFIX.length).trim().split(/ +/g); //parse arguments
+  const command = args.shift().toLowerCase(); //parse command
 
   if (command === 'ping') {
     const m = await msg.channel.send('Ping?');
@@ -29,6 +32,7 @@ client.on('message', async (msg) => {
     );
   }
 
+  if (!utils.checkRole(msg.member.roles.cache, config.roleWhitelist)) return; //check user against whitelisted roles
   if (command === 'track') {
     const channel = msg.member.voice.channel;
     if (!channel) return msg.reply('you must be in a voice channel');
@@ -57,10 +61,6 @@ client.on('message', async (msg) => {
     msg.react('👌');
     return;
   }
-
-  if (command === 'deltrack') {
-    // attendance = new Map();
-  }
 });
 
-client.login(process.env.TOKEN);
+client.login(process.env.TOKEN).then(console.log('prefix', PREFIX));
