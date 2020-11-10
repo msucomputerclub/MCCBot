@@ -1,58 +1,18 @@
-name: Deployed on Heroku
+name: Deploy
 
 on:
   push:
     branches:
-      - master
+      - master # Changing the branch here would also work
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Login to Heroku Registry
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:login
-
-      - name: Build and push
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:push -a dev-mcc-discord-bot worker
-
-      - name: Release to Heroku dev
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:release -a dev-mcc-discord-bot worker
-
-      - name: Pull dev image
-        run: docker pull registry.heroku.com/dev-mcc-discord-bot/worker
-
-      - name: Re-tag dev as prod
-        # Again, Heroku expects a naming convention here, so we just have to comply.
-        run: docker tag registry.heroku.com/dev-mcc-discord-bot/worker registry.heroku.com/mcc-discord-bot/worker
-
-      - name: Push production image
-        run: docker push registry.heroku.com/api-spring-boot/worker
-
-      - name: Push Prod Image
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:release -a api-spring-boot worker
-
-      - name: Push production image
-        run: docker push registry.heroku.com/mcc-discord-bot/worker
-
-      - name: Push Prod Image
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run: heroku container:release -a mcc-discord-bot worker
-
-        #   api_key: ${{secrets.HEROKU_API_KEY}}
-        #   email: 'cnovac1441@gmail.com'
-        #   docker_compose_file: ./docker-compose.heroku.yml
-        #   heroku_apps: '[{"imagename":"mccbot","appname":"mcc-discord-bot-new","apptype":"worker"}]'
-        # env:
-        #   TOKEN: ${{secrets.TOKEN}}
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "mcc-discord-bot" #Must be unique in Heroku
+          heroku_email: "cnovac1441@gmail.com"
+          procfile: "worker: npm start"
