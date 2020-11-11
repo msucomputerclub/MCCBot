@@ -1,10 +1,12 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-const client = new Discord.Client();
-const config = require('../config.json');
+const client = new Discord.Client({
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+});
 const Tracker = require('./tracker');
-const PREFIX = process.env.BOT_PREFIX || config.prefix;
 
+const config = require('./utils/loadConfig')();
+const PREFIX = process.env.BOT_PREFIX || config.prefix;
 const utils = require('./utils/utils');
 const mcctracker = new Tracker('my tracker');
 
@@ -22,6 +24,11 @@ client.on('message', async (msg) => {
 
   const args = msg.content.slice(PREFIX.length).trim().split(/ +/g); //parse arguments
   const command = args.shift().toLowerCase(); //parse command
+
+  if (command === 'test') {
+    const messageIds = await utils.getRoleboardMessageId();
+    console.log(messageIds);
+  }
 
   if (command === 'ping') {
     const m = await msg.channel.send('Ping?');
@@ -61,6 +68,49 @@ client.on('message', async (msg) => {
     msg.react('👌');
     return;
   }
+
+  if (command === 'roleboard') {
+    let category = args[0]; //get rolebaord category from command argument
+    if (!config.roleboard[category])
+      return msg.reply('no such board exists 🤷‍♂️');
+
+    //parse roles from config and add role name and value for the emoji reaction
+    const roles = [];
+    for (let i = 0; i < config.roleboard[category].length; i++) {
+      let role = await msg.guild.roles.fetch(config.roleboard[category][i]);
+      roles.push({
+        name: role.name,
+        value: utils.getNumberEmoji(i),
+      });
+    }
+
+    //setup embed and send it
+    const richEmbed = new Discord.MessageEmbed()
+      .setColor('#df5856')
+      .setTitle(`Choose your ${category}`)
+      .setDescription(
+        'Press corresponding reaction to assign role. Press again to remove role.'
+      )
+      .addFields(roles);
+    const reply = await msg.channel.send(richEmbed);
+    const updatedJsonBin = await utils.updateRoleboard(category, reply.id);
+    if (!updatedJsonBin) {
+      console.log('error updating JsonBin: ', response.message);
+      await reply.delete();
+      console.log('deleted message');
+      return;
+    }
+
+    //add reactions
+    for (const role of roles) {
+      await reply.react(role.value);
+    }
+  }
+});
+
+client.on('messageReactionAdd', async (reaction, user) => {
+  if (user.bot) return;
+  console.log(reaction, user);
 });
 
 client.login(process.env.TOKEN).then(console.log('prefix', PREFIX));
