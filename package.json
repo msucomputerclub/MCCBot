@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "cross-env NODE_ENV=production node ./src/index.js",
     "dev": "nodemon ./src/index.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/msucomputerclub/MCCBot#readme",
   "dependencies": {
     "axios": "^0.21.0",
+    "cross-env": "^7.0.2",
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0"
   },
