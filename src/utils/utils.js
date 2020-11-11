@@ -41,7 +41,9 @@ module.exports = {
     });
     console.log('response');
     if (!response || !response.data.success) {
+      console.log('raw response', response);
       console.log('axios error: ', response.message);
+
       return;
     }
     return response.data.data;
