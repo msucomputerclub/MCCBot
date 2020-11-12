@@ -36,17 +36,15 @@ module.exports = {
   async getRoleboardMessageId() {
     const response = await axios({
       method: 'get',
-      url: config.jsonbinurl,
+      url: config.jsonbinurl + '/latest',
       headers: { 'secret-key': process.env.JSONBINKEY },
     });
-    console.log('response');
-    if (!response || !response.data.success) {
-      console.log('raw response', response);
+    if (!response || response.data.success === false) {
       console.log('axios error: ', response.message);
 
       return;
     }
-    return response.data.data;
+    return response.data;
   },
   async updateRoleboard(roleboard, messageID) {
     if (!config.roleboard[roleboard]) {

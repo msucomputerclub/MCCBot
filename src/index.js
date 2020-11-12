@@ -26,8 +26,6 @@ client.on('message', async (msg) => {
   const command = args.shift().toLowerCase(); //parse command
 
   if (command === 'test') {
-    const messageIds = await utils.getRoleboardMessageId();
-    console.log(messageIds);
   }
 
   if (command === 'ping') {
