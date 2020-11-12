@@ -71,7 +71,6 @@ client.on('message', async (msg) => {
     let category = args[0]; //get rolebaord category from command argument
     if (!config.roleboard[category])
       return msg.reply('no such board exists 🤷‍♂️');
-
     //parse roles from config and add role name and value for the emoji reaction
     const roles = [];
     for (let i = 0; i < config.roleboard[category].length; i++) {
@@ -87,7 +86,7 @@ client.on('message', async (msg) => {
         value: utils.getNumberEmoji(i),
       });
     }
-
+    console.log('roles', roles);
     //setup embed and send it
     const richEmbed = new Discord.MessageEmbed()
       .setColor('#df5856')
@@ -96,8 +95,10 @@ client.on('message', async (msg) => {
         'Press corresponding reaction to assign role. Press again to remove role.'
       )
       .addFields(roles);
+    console.log('sending rich embed');
     const reply = await msg.channel.send(richEmbed);
     const updatedJsonBin = await utils.updateRoleboard(category, reply.id);
+    console.log('new jsonbin', updatedJsonBin);
     if (!updatedJsonBin) {
       console.log('error updating JsonBin: ', response.message);
       await reply.delete();
