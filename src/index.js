@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const client = new Discord.Client({
-  // partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 });
 const Tracker = require('./tracker');
 
