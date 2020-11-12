@@ -86,7 +86,6 @@ client.on('message', async (msg) => {
         value: utils.getNumberEmoji(i),
       });
     }
-    console.log('roles', roles);
     //setup embed and send it
     const richEmbed = new Discord.MessageEmbed()
       .setColor('#df5856')
@@ -95,7 +94,6 @@ client.on('message', async (msg) => {
         'Press corresponding reaction to assign role. Press again to remove role.'
       )
       .addFields(roles);
-    console.log('sending rich embed');
     const reply = await msg.channel.send(richEmbed);
     const updatedJsonBin = await utils.updateRoleboard(category, reply.id);
     console.log('new jsonbin', updatedJsonBin);

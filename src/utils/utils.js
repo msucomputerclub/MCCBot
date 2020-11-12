@@ -52,14 +52,16 @@ module.exports = {
       return;
     }
 
-    const data = {};
+    const messageIds = await this.getRoleboardMessageId();
+    if (!messageIds) return;
+    data = messageIds;
     data[roleboard] = messageID;
 
     const response = await axios({
       method: 'put',
       url: config.jsonbinurl,
       headers: { 'secret-key': process.env.JSONBINKEY },
-      data: { data },
+      data: data,
     });
     if (!response.data.success || !response) {
       console.log('axios error: ', response.error);
