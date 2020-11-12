@@ -76,6 +76,12 @@ client.on('message', async (msg) => {
     const roles = [];
     for (let i = 0; i < config.roleboard[category].length; i++) {
       let role = await msg.guild.roles.fetch(config.roleboard[category][i]);
+      if (!role) {
+        console.log('incorrect role id');
+        return msg.reply(
+          'role IDs are do not match roles on the server. Check config file'
+        );
+      }
       roles.push({
         name: role.name,
         value: utils.getNumberEmoji(i),
