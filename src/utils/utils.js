@@ -59,7 +59,7 @@ module.exports = {
       method: 'put',
       url: config.jsonbinurl,
       headers: { 'secret-key': process.env.JSONBINKEY },
-      data: data,
+      data: { data },
     });
     if (!response.data.success || !response) {
       console.log('axios error: ', response.error);
